@@ -1,4 +1,4 @@
-# Joey Google - Personal Web Toolkit
+# OS Google - Personal Web Toolkit
 
 A lightweight Personal Web Launcher that centralizes web search, RSS feeds, quick links, and personal dashboard into a single, fast, installable PWA.
 
