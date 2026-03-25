@@ -1,48 +1,36 @@
 {
-  "name": "OsGoogle - Personal Universal",
-  "short_name": "OsGoogle",
-  "description": "A personal universal operating system in your browser",
+  "name": "Joey Google - Personal Web Toolkit",
+  "short_name": "Joey Google",
+  "description": "A lightweight Personal Web Launcher that centralizes web search, RSS feeds, quick links, and personal dashboard.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#1a1a2e",
-  "categories": ["utilities", "productivity", "entertainment"],
+  "background_color": "#0f0f23",
+  "theme_color": "#0f0f23",
+  "categories": ["utilities", "productivity"],
   "lang": "en",
   "dir": "ltr",
   "scope": "/",
   "icons": [
     {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "shortcuts": [
     {
-      "name": "Google",
-      "short_name": "Google",
-      "url": "https://www.google.com",
-      "description": "Search the web"
+      "name": "Search",
+      "short_name": "Search",
+      "description": "Search the web",
+      "url": "/#search"
     },
     {
-      "name": "Gmail",
-      "short_name": "Gmail",
-      "url": "https://mail.google.com",
-      "description": "Check your email"
-    },
-    {
-      "name": "YouTube",
-      "short_name": "YouTube",
-      "url": "https://www.youtube.com",
-      "description": "Watch videos"
+      "name": "RSS Feeds",
+      "short_name": "Feeds",
+      "description": "Read RSS feeds",
+      "url": "/#rss"
     }
   ]
 }

@@ -1,26 +1,26 @@
 /**
- * OsGoogle Service Worker
+ * Joey Google Service Worker
  * Provides offline caching and functionality
  */
 
-const CACHE_NAME = 'osgoogle-v1';
-const DYNAMIC_CACHE = 'osgoogle-dynamic-v1';
+const CACHE_NAME = 'joeygoogle-v1';
+const DYNAMIC_CACHE = 'joeygoogle-dynamic-v1';
 
-// Assets to cache on install
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/styles.css',
-  '/app.js',
   '/manifest.json',
-  '/core/storage.js',
-  '/core/gestures.js',
-  '/core/widgets.js',
-  '/core/apps.js',
-  '/core/launcher.js'
+  '/js/app.js',
+  '/js/services/storage.js',
+  '/js/services/rss.js',
+  '/js/services/weather.js',
+  '/js/services/quotes.js',
+  '/js/components/search.js',
+  '/js/components/shortcuts.js',
+  '/icons/icon.svg'
 ];
 
-// Install event
 self.addEventListener('install', event => {
   console.log('[SW] Installing service worker...');
   event.waitUntil(
@@ -34,7 +34,6 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate event
 self.addEventListener('activate', event => {
   console.log('[SW] Activating service worker...');
   event.waitUntil(
@@ -52,19 +51,17 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests
   if (request.method !== 'GET') return;
 
-  // Skip chrome_extension and other non-http(s) requests
   if (!url.protocol.startsWith('http')) return;
 
-  // Skip API calls
-  if (url.hostname === 'wttr.in' || url.hostname === 'api.github.com') {
+  if (url.hostname === 'wttr.in' || 
+      url.hostname === 'zenquotes.io' || 
+      url.hostname === 'api.rss2json.com') {
     event.respondWith(
       fetch(request)
         .catch(() => new Response(JSON.stringify({}), {
@@ -74,7 +71,6 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // For navigation requests (HTML), try network first
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -93,7 +89,6 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // For static assets, try cache first, then network
   event.respondWith(
     caches.match(request)
       .then(response => {
@@ -110,7 +105,6 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Handle messages from the app
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
