@@ -1,5 +1,5 @@
 /**
- * WebOS Local Server
+ * OsGoogle Local Server
  */
 
 const http = require('http');
@@ -59,7 +59,7 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`
 ╔═══════════════════════════════════════════════════╗
-║   WebOS Server running at:                       ║
+║   OsGoogle Server running at:                       ║
 ║   http://localhost:${PORT}                        ║
 ╚═══════════════════════════════════════════════════╝
   `);

@@ -1,11 +1,11 @@
 /**
- * WebOS Storage Module
+ * OsGoogle Storage Module
  * Handles persistent storage using IndexedDB with LocalStorage fallback
  */
 
-const WebOSStorage = {
+const OsGoogleStorage = {
   db: null,
-  dbName: 'WebOS_DB',
+  dbName: 'OsGoogle_DB',
   version: 1,
   
   // Initialize IndexedDB
@@ -63,15 +63,18 @@ const WebOSStorage = {
     
     return new Promise((resolve, reject) => {
       try {
-        const transaction = this.db.transaction(storeName, 'readonly');
+        const transaction = this.db.transaction([storeName], 'readonly');
         const store = transaction.objectStore(storeName);
         const request = store.get(key);
         
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => {
+          console.log('IndexedDB get success:', storeName, key);
+          resolve(request.result);
+        };
         request.onerror = () => reject(request.error);
       } catch (e) {
         // Fallback to LocalStorage
-        const data = JSON.parse(localStorage.getItem(`webos_${storeName}`) || '{}');
+        const data = JSON.parse(localStorage.getItem(`osgoogle_${storeName}`) || '{}');
         resolve(data[key] || null);
       }
     });
@@ -82,15 +85,18 @@ const WebOSStorage = {
     
     return new Promise((resolve, reject) => {
       try {
-        const transaction = this.db.transaction(storeName, 'readonly');
+        const transaction = this.db.transaction([storeName], 'readonly');
         const store = transaction.objectStore(storeName);
         const request = store.getAll();
         
-        request.onsuccess = () => resolve(request.result || []);
+        request.onsuccess = () => {
+          console.log('IndexedDB getAll success:', storeName);
+          resolve(request.result || []);
+        };
         request.onerror = () => reject(request.error);
       } catch (e) {
         // Fallback to LocalStorage
-        const data = JSON.parse(localStorage.getItem(`webos_${storeName}`) || '[]');
+        const data = JSON.parse(localStorage.getItem(`osgoogle_${storeName}`) || '[]');
         resolve(data);
       }
     });
@@ -101,18 +107,21 @@ const WebOSStorage = {
     
     return new Promise((resolve, reject) => {
       try {
-        const transaction = this.db.transaction(storeName, 'readwrite');
+        const transaction = this.db.transaction([storeName], 'readwrite');
         const store = transaction.objectStore(storeName);
         const request = store.put(data);
         
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => {
+          console.log('IndexedDB put success:', storeName);
+          resolve(request.result);
+        };
         request.onerror = () => reject(request.error);
       } catch (e) {
         // Fallback to LocalStorage
         const key = data.id || data.key || Date.now();
-        const storeData = JSON.parse(localStorage.getItem(`webos_${storeName}`) || '{}');
+        const storeData = JSON.parse(localStorage.getItem(`osgoogle_${storeName}`) || '{}');
         storeData[key] = data;
-        localStorage.setItem(`webos_${storeName}`, JSON.stringify(storeData));
+        localStorage.setItem(`osgoogle_${storeName}`, JSON.stringify(storeData));
         resolve(key);
       }
     });
@@ -123,17 +132,20 @@ const WebOSStorage = {
     
     return new Promise((resolve, reject) => {
       try {
-        const transaction = this.db.transaction(storeName, 'readwrite');
+        const transaction = this.db.transaction([storeName], 'readwrite');
         const store = transaction.objectStore(storeName);
         const request = store.delete(key);
         
-        request.onsuccess = () => resolve();
+        request.onsuccess = () => {
+          console.log('IndexedDB delete success:', storeName, key);
+          resolve();
+        };
         request.onerror = () => reject(request.error);
       } catch (e) {
         // Fallback to LocalStorage
-        const storeData = JSON.parse(localStorage.getItem(`webos_${storeName}`) || '{}');
+        const storeData = JSON.parse(localStorage.getItem(`osgoogle_${storeName}`) || '{}');
         delete storeData[key];
-        localStorage.setItem(`webos_${storeName}`, JSON.stringify(storeData));
+        localStorage.setItem(`osgoogle_${storeName}`, JSON.stringify(storeData));
         resolve();
       }
     });
@@ -144,15 +156,18 @@ const WebOSStorage = {
     
     return new Promise((resolve, reject) => {
       try {
-        const transaction = this.db.transaction(storeName, 'readwrite');
+        const transaction = this.db.transaction([storeName], 'readwrite');
         const store = transaction.objectStore(storeName);
         const request = store.clear();
         
-        request.onsuccess = () => resolve();
+        request.onsuccess = () => {
+          console.log('IndexedDB clear success:', storeName);
+          resolve();
+        };
         request.onerror = () => reject(request.error);
       } catch (e) {
         // Fallback to LocalStorage
-        localStorage.removeItem(`webos_${storeName}`);
+        localStorage.removeItem(`osgoogle_${storeName}`);
         resolve();
       }
     });
@@ -271,10 +286,10 @@ const WebOSStorage = {
     await this.clear('settings');
     await this.clear('notes');
     await this.clear('folders');
-    localStorage.removeItem('webos_layout');
+    localStorage.removeItem('osgoogle_layout');
     console.log('All data reset');
   }
 };
 
 // Make it globally available
-window.WebOSStorage = WebOSStorage;
+window.OsGoogleStorage = OsGoogleStorage;

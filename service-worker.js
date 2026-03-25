@@ -1,10 +1,10 @@
 /**
- * WebOS Service Worker
+ * OsGoogle Service Worker
  * Provides offline caching and functionality
  */
 
-const CACHE_NAME = 'webos-v1';
-const DYNAMIC_CACHE = 'webos-dynamic-v1';
+const CACHE_NAME = 'osgoogle-v1';
+const DYNAMIC_CACHE = 'osgoogle-dynamic-v1';
 
 // Assets to cache on install
 const STATIC_ASSETS = [

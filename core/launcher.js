@@ -1,9 +1,9 @@
 /**
- * WebOS Launcher Module
+ * OsGoogle Launcher Module
  * Manages the home screen, pages, icons, and navigation
  */
 
-const WebOSLauncher = {
+const OsGoogleLauncher = {
   currentPage: 0,
   totalPages: 1,
   iconsPerPage: 16,
@@ -14,12 +14,12 @@ const WebOSLauncher = {
   
   async init() {
     // Initialize storage first
-    await WebOSStorage.init();
+    await OsGoogleStorage.init();
     
     // Initialize other modules
-    await WebOSApps.init();
-    WebOSWidgets.init();
-    WebOSGestures.init();
+    await OsGoogleApps.init();
+    OsGoogleWidgets.init();
+    OsGoogleGestures.init();
     
     // Load user data
     await this.loadLayout();
@@ -39,7 +39,7 @@ const WebOSLauncher = {
       document.getElementById('loading-screen')?.classList.add('hidden');
     }, 500);
     
-    console.log('WebOS Launcher initialized');
+    console.log('OsGoogle Launcher initialized');
   },
   
   async loadLayout() {
@@ -59,7 +59,7 @@ const WebOSLauncher = {
   },
   
   createDefaultLayout() {
-    const apps = WebOSApps.defaultApps;
+    const apps = OsGoogleApps.defaultApps;
     
     // Split apps into pages
     this.pages = [];
@@ -122,7 +122,7 @@ const WebOSLauncher = {
     if (!dock) return;
     
     // Dock apps (first 4 apps)
-    const dockApps = WebOSApps.defaultApps.slice(0, 4);
+    const dockApps = OsGoogleApps.defaultApps.slice(0, 4);
     
     dock.innerHTML = dockApps.map(app => `
       <div class="icon" data-id="${app.id}">
@@ -136,7 +136,7 @@ const WebOSLauncher = {
     dock.querySelectorAll('.icon').forEach(iconEl => {
       iconEl.addEventListener('click', () => {
         const appId = iconEl.dataset.id;
-        WebOSApps.openApp(appId);
+        OsGoogleApps.openApp(appId);
       });
     });
   },
@@ -154,7 +154,7 @@ const WebOSLauncher = {
     document.querySelectorAll('.page .icon').forEach(iconEl => {
       iconEl.addEventListener('click', (e) => {
         const appId = iconEl.dataset.id;
-        WebOSApps.openApp(appId);
+        OsGoogleApps.openApp(appId);
       });
     });
     
@@ -165,7 +165,7 @@ const WebOSLauncher = {
     
     // Search close button
     document.getElementById('search-close-btn')?.addEventListener('click', () => {
-      WebOSWidgets.closeSearch();
+      OsGoogleWidgets.closeSearch();
     });
     
     // Search input
@@ -183,7 +183,7 @@ const WebOSLauncher = {
       const iconEl = e.target.closest('.icon');
       if (iconEl) {
         const appId = iconEl.dataset.id;
-        WebOSApps.openApp(appId);
+        OsGoogleApps.openApp(appId);
       }
     });
   },
@@ -205,7 +205,7 @@ const WebOSLauncher = {
         };
         
         document.body.style.background = wallpapers[wp] || wallpapers.default;
-        WebOSStorage.saveSetting('wallpaper', wp);
+        OsGoogleStorage.saveSetting('wallpaper', wp);
       });
     });
     
@@ -213,14 +213,14 @@ const WebOSLauncher = {
     document.getElementById('theme-toggle-btn')?.addEventListener('click', () => {
       const isDark = document.body.getAttribute('data-theme') !== 'light';
       document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      WebOSStorage.saveSetting('theme', isDark ? 'light' : 'dark');
+      OsGoogleStorage.saveSetting('theme', isDark ? 'light' : 'dark');
     });
     
     // Reset layout
     document.getElementById('reset-layout-btn')?.addEventListener('click', async () => {
       if (confirm('Reset layout to default?')) {
         localStorage.removeItem('webos_layout');
-        await WebOSStorage.resetAll();
+        await OsGoogleStorage.resetAll();
         location.reload();
       }
     });
@@ -377,7 +377,7 @@ const WebOSLauncher = {
       window.open('https://www.google.com/search?q=' + encodeURIComponent(query), '_blank');
     }
     
-    WebOSWidgets.closeSearch();
+    OsGoogleWidgets.closeSearch();
   },
   
   toggleSettingsPanel() {
@@ -410,4 +410,4 @@ const WebOSLauncher = {
 };
 
 // Make it globally available
-window.WebOSLauncher = WebOSLauncher;
+window.OsGoogleLauncher = OsGoogleLauncher;

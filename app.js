@@ -1,29 +1,42 @@
 /**
- * WebOS - Personal Universal
+ * OsGoogle - Personal Universal
  * Main Application Entry Point
  * 
- * This is the main initialization file that starts the WebOS
+ * This is the main initialization file that starts the OsGoogle
  */
 
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('🚀 Starting WebOS...');
+  console.log('🚀 Starting OsGoogle...');
+  console.log('Checking modules...');
+  console.log('OsGoogleStorage exists:', typeof OsGoogleStorage);
+  console.log('OsGoogleGestures exists:', typeof OsGoogleGestures);
+  console.log('OsGoogleWidgets exists:', typeof OsGoogleWidgets);
+  console.log('OsGoogleApps exists:', typeof OsGoogleApps);
+  console.log('OsGoogleLauncher exists:', typeof OsGoogleLauncher);
   
   try {
     // Initialize the launcher (which initializes all modules)
-    await WebOSLauncher.init();
+    await OsGoogleLauncher.init();
     
-    console.log('✅ WebOS initialized successfully');
+    console.log('✅ OsGoogle initialized successfully');
+    
+    // Hide loading screen
+    const loading = document.getElementById('loading-screen');
+    if (loading) {
+      loading.classList.add('hidden');
+    }
   } catch (error) {
-    console.error('❌ Failed to initialize WebOS:', error);
+    console.error('❌ Failed to initialize OsGoogle:', error);
     
     // Show error message
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) {
       loadingScreen.innerHTML = `
         <div style="text-align: center; padding: 20px;">
-          <h2>Failed to load WebOS</h2>
+          <h2>Failed to load OsGoogle</h2>
           <p>${error.message}</p>
+          <p style="font-size: 12px; color: #666;">Check console for details</p>
           <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; font-size: 16px;">
             Retry
           </button>
@@ -84,17 +97,17 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Export for debugging
-window.WebOS = {
+window.OsGoogle = {
   version: '1.0.0',
-  name: 'WebOS - Personal Universal',
+  name: 'OsGoogle - Personal Universal',
   modules: {
-    Storage: WebOSStorage,
-    Gestures: WebOSGestures,
-    Widgets: WebOSWidgets,
-    Apps: WebOSApps,
-    Launcher: WebOSLauncher
+    Storage: OsGoogleStorage,
+    Gestures: OsGoogleGestures,
+    Widgets: OsGoogleWidgets,
+    Apps: OsGoogleApps,
+    Launcher: OsGoogleLauncher
   }
 };
 
-console.log('%c WebOS ', 'background: #007AFF; color: white; font-size: 20px; padding: 5px 10px; border-radius: 5px;');
+console.log('%c OsGoogle ', 'background: #007AFF; color: white; font-size: 20px; padding: 5px 10px; border-radius: 5px;');
 console.log('%c Personal Universal Operating System ', 'color: #007AFF; font-size: 14px;');

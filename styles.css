@@ -295,15 +295,20 @@ body {
    Widgets Layer
    ================================ */
 .widgets-layer {
-  position: fixed;
-  top: var(--status-bar-height);
+  position: absolute;
+  top: calc(var(--status-bar-height) + 20px);
   left: 0;
   right: 0;
+  bottom: 0;
   padding: var(--page-padding);
-  z-index: 50;
+  padding-bottom: calc(var(--dock-height) + 40px);
+  z-index: 10;
+  pointer-events: none;
+  overflow-y: auto;
 }
 
 .widget {
+  pointer-events: auto;
   background: var(--bg-glass);
   backdrop-filter: var(--bg-glass-blur);
   -webkit-backdrop-filter: var(--bg-glass-blur);

@@ -1,6 +1,6 @@
 {
-  "name": "WebOS - Personal Universal",
-  "short_name": "WebOS",
+  "name": "OsGoogle - Personal Universal",
+  "short_name": "OsGoogle",
   "description": "A personal universal operating system in your browser",
   "start_url": "/",
   "display": "standalone",

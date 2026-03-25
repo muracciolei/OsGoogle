@@ -1,9 +1,9 @@
 /**
- * WebOS Gestures Module
+ * OsGoogle Gestures Module
  * Handles touch gestures and interactions
  */
 
-const WebOSGestures = {
+const OsGoogleGestures = {
   touchStartX: 0,
   touchStartY: 0,
   touchStartTime: 0,
@@ -247,4 +247,4 @@ const WebOSGestures = {
 };
 
 // Make it globally available
-window.WebOSGestures = WebOSGestures;
+window.OsGoogleGestures = OsGoogleGestures;

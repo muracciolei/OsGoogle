@@ -1,14 +1,22 @@
 /**
- * WebOS Apps Module
+ * OsGoogle Apps Module
  * Manages and renders applications
  */
 
-const WebOSApps = {
+const OsGoogleApps = {
   apps: [],
   currentApp: null,
   
   // Default apps
   defaultApps: [
+    {
+      id: 'camera',
+      name: 'Camera',
+      icon: '📷',
+      url: 'https://camera.google.com',
+      category: 'utility',
+      color: '#8E8E93'
+    },
     {
       id: 'google',
       name: 'Google',
@@ -96,12 +104,28 @@ const WebOSApps = {
       app: 'calculator',
       category: 'utility',
       color: '#636366'
+    },
+    {
+      id: 'meet',
+      name: 'Meet',
+      icon: '📹',
+      url: 'https://meet.google.com',
+      category: 'google',
+      color: '#00897B'
+    },
+    {
+      id: 'chat',
+      name: 'Chat',
+      icon: '💬',
+      url: 'https://chat.google.com',
+      category: 'google',
+      color: '#4285F4'
     }
   ],
   
   async init() {
     // Load apps from storage or use defaults
-    const savedApps = await WebOSStorage.getIcons();
+    const savedApps = await OsGoogleStorage.getIcons();
     this.apps = savedApps.length > 0 ? savedApps : this.defaultApps;
     
     console.log('Apps initialized:', this.apps.length, 'apps');
@@ -127,20 +151,20 @@ const WebOSApps = {
     };
     
     this.apps.push(newApp);
-    await WebOSStorage.saveIcon(newApp);
+    await OsGoogleStorage.saveIcon(newApp);
     return newApp;
   },
   
   async removeApp(id) {
     this.apps = this.apps.filter(app => app.id !== id);
-    await WebOSStorage.delete('icons', id);
+    await OsGoogleStorage.delete('icons', id);
   },
   
   async updateApp(id, updates) {
     const index = this.apps.findIndex(app => app.id === id);
     if (index !== -1) {
       this.apps[index] = { ...this.apps[index], ...updates };
-      await WebOSStorage.saveIcon(this.apps[index]);
+      await OsGoogleStorage.saveIcon(this.apps[index]);
     }
   },
   
@@ -250,7 +274,7 @@ const WebOSApps = {
         
         <div class="settings-section">
           <h3>About</h3>
-          <p class="about-text">WebOS v1.0.0</p>
+          <p class="about-text">OsGoogle v1.0.0</p>
           <p class="about-text">Personal Universal Operating System</p>
         </div>
       </div>
@@ -262,7 +286,7 @@ const WebOSApps = {
     document.getElementById('toggle-theme-btn')?.addEventListener('click', () => {
       const isDark = document.body.getAttribute('data-theme') !== 'light';
       document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      WebOSStorage.saveSetting('theme', isDark ? 'light' : 'dark');
+      OsGoogleStorage.saveSetting('theme', isDark ? 'light' : 'dark');
     });
     
     // Wallpaper buttons
@@ -281,13 +305,13 @@ const WebOSApps = {
         };
         
         document.body.style.background = wallpapers[wp] || wallpapers.default;
-        WebOSStorage.saveSetting('wallpaper', wp);
+        OsGoogleStorage.saveSetting('wallpaper', wp);
       });
     });
     
     // Export
     document.getElementById('export-btn')?.addEventListener('click', async () => {
-      const data = await WebOSStorage.exportData();
+      const data = await OsGoogleStorage.exportData();
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -304,7 +328,7 @@ const WebOSApps = {
       input.onchange = async (e) => {
         const file = e.target.files[0];
         const text = await file.text();
-        const success = await WebOSStorage.importData(text);
+        const success = await OsGoogleStorage.importData(text);
         if (success) {
           alert('Data imported successfully!');
           location.reload();
@@ -318,7 +342,7 @@ const WebOSApps = {
     // Reset
     document.getElementById('reset-btn')?.addEventListener('click', async () => {
       if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
-        await WebOSStorage.resetAll();
+        await OsGoogleStorage.resetAll();
         location.reload();
       }
     });
@@ -362,7 +386,7 @@ const WebOSApps = {
       const content = document.getElementById('note-content').value;
       
       if (content) {
-        await WebOSStorage.saveNote({
+        await OsGoogleStorage.saveNote({
           title,
           content,
           date: new Date().toISOString()
@@ -374,7 +398,7 @@ const WebOSApps = {
   },
   
   async renderNotesList() {
-    const notes = await WebOSStorage.getNotes();
+    const notes = await OsGoogleStorage.getNotes();
     const listEl = document.getElementById('notes-list');
     
     if (!listEl) return;
@@ -573,4 +597,4 @@ const WebOSApps = {
 };
 
 // Make it globally available
-window.WebOSApps = WebOSApps;
+window.OsGoogleApps = OsGoogleApps;
