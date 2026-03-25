@@ -390,12 +390,20 @@ const OsGoogleLauncher = {
   updateTime() {
     const now = new Date();
     const timeEl = document.getElementById('status-time');
+    const dateEl = document.getElementById('status-date');
     
     if (timeEl) {
       timeEl.textContent = now.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false
+      });
+    }
+    
+    if (dateEl) {
+      dateEl.textContent = now.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric'
       });
     }
   },
