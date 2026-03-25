@@ -37,9 +37,8 @@ const OsGoogleWidgets = {
     const savedWidgets = await OsGoogleStorage.getWidgets();
     this.widgets = savedWidgets.length > 0 ? savedWidgets : this.defaultWidgets;
     
-    this.render();
-    this.startClock();
-    this.fetchWeather();
+    // Use compact widget rendering
+    this.renderCompactWidgets();
     
     console.log('Widgets initialized');
   },
@@ -56,59 +55,50 @@ const OsGoogleWidgets = {
   },
   
   createWidgetHTML(widget) {
+    // Show both clock and weather in compact mode
+    if (widget.type === 'clock' || widget.type === 'weather') {
+      return ''; // We'll render them together below
+    }
+    
     switch (widget.type) {
-      case 'clock':
-        return `
-          <div class="widget clock-widget" data-id="${widget.id}">
-            <div class="widget-header">
-              <span class="widget-title">Clock</span>
-            </div>
-            <div class="widget-content">
-              <div class="clock-time" id="clock-time">--:--</div>
-              <div class="clock-date" id="clock-date">Loading...</div>
-            </div>
-          </div>
-        `;
-      
-      case 'weather':
-        return `
-          <div class="widget weather-widget" data-id="${widget.id}">
-            <div class="weather-main">
-              <span class="weather-icon" id="weather-icon">🌤️</span>
-              <div>
-                <div class="weather-temp" id="weather-temp">--°</div>
-                <div class="weather-desc" id="weather-desc">Loading...</div>
-              </div>
-            </div>
-            <div class="weather-location" id="weather-location">Detecting...</div>
-          </div>
-        `;
-      
       case 'search':
         return `
           <div class="widget search-widget" data-id="${widget.id}" onclick="OsGoogleWidgets.openSearch()">
             <svg viewBox="0 0 24 24" width="20" height="20">
               <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
             </svg>
-            <span>Search or enter URL...</span>
-          </div>
-        `;
-      
-      case 'notes':
-        return `
-          <div class="widget notes-widget" data-id="${widget.id}" onclick="OsGoogleApps.openApp('notes')">
-            <div class="widget-header">
-              <span class="widget-title">Quick Notes</span>
-            </div>
-            <div class="widget-content" id="quick-notes">
-              <p style="color: var(--text-secondary)">Tap to add note...</p>
-            </div>
+            <span>Search...</span>
           </div>
         `;
       
       default:
         return '';
     }
+  },
+  
+  renderCompactWidgets() {
+    // Render clock + weather in one compact line
+    const container = this.container;
+    if (!container) return;
+    
+    container.innerHTML = `
+      <div class="compact-widgets" style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px;">
+        <div class="mini-clock" style="flex: 1;">
+          <div style="font-size: 28px; font-weight: 300;" id="clock-time">--:--</div>
+          <div style="font-size: 11px; color: rgba(255,255,255,0.7);" id="clock-date">Loading...</div>
+        </div>
+        <div class="mini-weather" style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 24px;" id="weather-icon">🌤️</span>
+          <div>
+            <div style="font-size: 18px; font-weight: 500;" id="weather-temp">--°</div>
+            <div style="font-size: 10px; color: rgba(255,255,255,0.6);" id="weather-location">Location</div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    this.startClock();
+    this.fetchWeather();
   },
   
   startClock() {
